@@ -33,8 +33,11 @@ function! faff#Complete(findstart, base) abort
             let field_name = 'tracker'
         endif
 
+        " Get the faff command (configurable via g:faff_command)
+        let faff_cmd = get(g:, 'faff_command', 'faff')
+
         " Call faff field list to get completions
-        let cmd = 'faff field list ' . field_name . ' --plain 2>/dev/null | tail -n +2 | cut -f1'
+        let cmd = faff_cmd . ' field list ' . field_name . ' --plain 2>/dev/null | tail -n +2 | cut -f1'
         let values = systemlist(cmd)
 
         " Filter based on what's already typed

@@ -87,7 +87,25 @@ The plugin:
 6. Filters based on what you've already typed
 7. Returns matches with the field name shown in brackets
 
+## Configuration
+
+### Custom Faff Command Path
+
+If `faff` is not in your `$PATH` (e.g., installed in a Python venv), you can specify the full path:
+
+**For Neovim (init.lua):**
+```lua
+vim.g.faff_command = '/Users/tom/Projects/faff-cli/.venv/bin/faff'
+```
+
+**For Vim (vimrc):**
+```vim
+let g:faff_command = '/Users/tom/Projects/faff-cli/.venv/bin/faff'
+```
+
+If not set, defaults to `faff` (assumes it's on your PATH).
+
 ## Requirements
 
-- `faff` CLI must be in your `$PATH`
+- `faff` CLI must be available (either in `$PATH` or configured via `g:faff_command`)
 - Your current working directory must be a Faff workspace (or set explicitly)
