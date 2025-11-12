@@ -1,5 +1,5 @@
-" Faff vim plugin - Context-aware omnicompletion for ROAST fields
-" Provides intelligent completion for role, objective, action, subject, and tracker fields
+" Faff vim plugin - Context-aware omnicompletion for ASTRO fields
+" Provides intelligent completion for action, subject, tracker, role, and objective fields
 
 function! faff#Complete(findstart, base) abort
     if a:findstart

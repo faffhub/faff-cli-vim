@@ -1,5 +1,5 @@
 " Faff filetype plugin
-" Sets up omnicompletion for ROAST fields
+" Sets up omnicompletion for ASTRO fields (legacy - prefer Telescope picker)
 
 if exists('b:did_ftplugin')
     finish
