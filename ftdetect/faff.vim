@@ -10,12 +10,13 @@ augroup faff_workspace_detect
 augroup END
 
 function! s:DetectFaffWorkspaceFile()
+  echom 'faff ftdetect: called for ' . expand('%:p')
   " Determine FAFF_DIR: use $FAFF_DIR if set, otherwise default to ~/.faff
   let faff_dir = empty($FAFF_DIR) ? expand('~/.faff') : $FAFF_DIR
 
   " Normalize paths for comparison
   let faff_dir = fnamemodify(resolve(faff_dir), ':p')
-  let current_file = expand('%:p')
+  let current_file = resolve(expand('%:p'))
 
   " Check if file is in logs/ or plans/ subdirectory of FAFF_DIR
   if stridx(current_file, faff_dir . 'logs/') == 0
