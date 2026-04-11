@@ -1,4 +1,4 @@
--- Faff Telescope picker for ASTRO fields
+-- Faff Telescope picker for session fields
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local conf = require('telescope.config').values
@@ -22,8 +22,8 @@ local function detect_field()
     field = 'tracker'
   end
 
-  -- Validate it's a ASTRO field
-  local valid_fields = {role = true, objective = true, action = true, subject = true, tracker = true}
+  -- Validate it's a faff session field
+  local valid_fields = {role = true, impact = true, mode = true, subject = true, tracker = true}
   if valid_fields[field] then
     return field
   end
@@ -96,7 +96,7 @@ function M.pick_field()
   local field = detect_field()
 
   if not field then
-    vim.notify('Not on a ASTRO field line', vim.log.levels.WARN)
+    vim.notify('Not on a faff session field line', vim.log.levels.WARN)
     return
   end
 

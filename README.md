@@ -1,12 +1,12 @@
 # Faff Neovim Plugin
 
-Fuzzy-searchable field completion for editing Faff plan files in Neovim.
+Fuzzy-searchable field completion for editing Faff session files in Neovim.
 
 **Note:** This plugin requires Neovim and Telescope. It will not work in regular Vim.
 
 ## Features
 
-- Fuzzy-search ASTRO field values (action, subject, tracker, role, objective)
+- Fuzzy-search session field values (mode, subject, tracker, role, impact)
 - Uses `faff field list` to pull real vocabulary from your Faff workspace
 - Context-aware: detects which field you're editing
 - Shows tracker names prominently for easy selection
@@ -16,11 +16,9 @@ Fuzzy-searchable field completion for editing Faff plan files in Neovim.
 
 ### Using lazy.nvim (Recommended)
 
-Add to your Neovim config:
-
 ```lua
 {
-  'faffhub/faff-cli-vim',
+  'faffhub/faff-cli-neovim',
   dependencies = {
     'nvim-telescope/telescope.nvim',
   },
@@ -39,7 +37,7 @@ Add to your Neovim config:
       callback = function()
         vim.keymap.set({'n', 'i'}, '<C-f>', function()
           require('faff.picker').pick_field()
-        end, { buffer = true, desc = 'Pick ASTRO field value' })
+        end, { buffer = true, desc = 'Pick faff session field value' })
       end,
     })
   end,
@@ -56,7 +54,7 @@ The plugin automatically activates when editing:
 
 ### Using the Telescope Picker
 
-1. Position cursor on an ASTRO field line:
+1. Position cursor on a session field line:
    ```toml
    role = ""
    trackers = []
@@ -87,18 +85,18 @@ trackers = ["element:2633285", # Customer Support
 
 ## Supported Fields
 
-- `action = "..."`
+- `mode = "..."`
 - `subject = "..."`
 - `tracker` in `trackers = [ "...",]`
 - `role = "..."`
-- `objective = "..."`
+- `impact = "..."`
 
 ## How It Works
 
 The plugin:
 1. Detects `.faff.toml` files and sets filetype to `faff`
 2. Binds `Ctrl-F` to open the Telescope picker
-3. When triggered, detects which ASTRO field you're editing
+3. When triggered, detects which session field you're editing
 4. Calls `faff field list <field> --plain` to get ALL values (used + unused)
 5. For trackers, shows tracker names from plan definitions
 6. Opens Telescope for fuzzy searching
@@ -123,7 +121,7 @@ To change the keybinding from `Ctrl-F`, update the keymap in your config:
 ```lua
 vim.keymap.set({'n', 'i'}, '<leader>ff', function()  -- Use leader+ff instead
   require('faff.picker').pick_field()
-end, { buffer = true, desc = 'Pick ASTRO field value' })
+end, { buffer = true, desc = 'Pick faff session field value' })
 ```
 
 ## Requirements

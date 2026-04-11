@@ -1,5 +1,5 @@
-" Faff vim plugin - Context-aware omnicompletion for ASTRO fields
-" Provides intelligent completion for action, subject, tracker, role, and objective fields
+" Faff vim plugin - Context-aware omnicompletion for session fields
+" Provides intelligent completion for mode, subject, tracker, role, and impact fields
 
 function! faff#Complete(findstart, base) abort
     if a:findstart
@@ -19,8 +19,8 @@ function! faff#Complete(findstart, base) abort
 
         " Detect which field we're completing
         " Match lines like: role = "element:head-of-customer-success"
-        "                   objective = "element:resolving-operational-issues"
-        let field_match = matchlist(line, '^\s*\(role\|objective\|action\|subject\|trackers\)\s*=')
+        "                   impact = "element:resolving-operational-issues"
+        let field_match = matchlist(line, '^\s*\(role\|impact\|mode\|subject\|trackers\)\s*=')
 
         if empty(field_match)
             return []
