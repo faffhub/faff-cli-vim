@@ -12,11 +12,7 @@ augroup END
 function! s:DetectFaffWorkspaceFile()
   let faff_dir = fnamemodify(resolve(empty($FAFF_DIR) ? expand('~/.faff') : $FAFF_DIR), ':p')
   let current_file = resolve(expand('%:p'))
-  echom 'faff ftdetect: current=' . current_file
-  echom 'faff ftdetect: faff_dir=' . faff_dir
-  echom 'faff ftdetect: stridx=' . stridx(current_file, faff_dir . 'logs/')
   if stridx(current_file, faff_dir . 'logs/') == 0
-    echom 'faff ftdetect: setting filetype=faff'
     set filetype=faff
   elseif stridx(current_file, faff_dir . 'plans/') == 0
     set filetype=faff
