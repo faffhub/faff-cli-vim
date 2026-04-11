@@ -6,7 +6,7 @@
 " Detect files in FAFF_DIR (defaults to ~/.faff if not set)
 augroup faff_workspace_detect
   autocmd!
-  autocmd BufRead,BufNewFile *.toml,*.json call s:DetectFaffWorkspaceFile()
+  autocmd BufReadPost *.toml,*.json call s:DetectFaffWorkspaceFile()
 augroup END
 
 function! s:DetectFaffWorkspaceFile()
