@@ -14,7 +14,7 @@ function! s:DetectFaffWorkspaceFile()
   let faff_dir = empty($FAFF_DIR) ? expand('~/.faff') : $FAFF_DIR
 
   " Normalize paths for comparison
-  let faff_dir = fnamemodify(faff_dir, ':p')
+  let faff_dir = fnamemodify(resolve(faff_dir), ':p')
   let current_file = expand('%:p')
 
   " Check if file is in logs/ or plans/ subdirectory of FAFF_DIR
