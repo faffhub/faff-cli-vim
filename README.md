@@ -1,20 +1,21 @@
-# Faff Neovim Plugin
+# faff-cli-neovim
 
-Fuzzy-searchable field completion for editing Faff session files in Neovim.
+Neovim plugin for [Faff](https://github.com/faffhub/faff-cli) — fuzzy-searchable field completion when editing log files.
 
-**Note:** This plugin requires Neovim and Telescope. It will not work in regular Vim.
+**Requires Neovim (v0.10+) and [Telescope](https://github.com/nvim-telescope/telescope.nvim).**
 
-## Features
+## What it does
 
-- Fuzzy-search session field values (mode, subject, tracker, role, impact)
-- Uses `faff field list` to pull real vocabulary from your Faff workspace
-- Context-aware: detects which field you're editing
-- Shows tracker names prominently for easy selection
-- Inserts tracker IDs with human-readable comments
+When you run `faff log edit`, the log file opens in Neovim. This plugin:
+
+- Detects that you're editing a Faff log file and sets the `faff` filetype
+- Binds `Ctrl-F` to a Telescope picker for fuzzy-searching field values
+- Calls `faff field list <field>` to pull live vocabulary from your workspace
+- Inserts the selected value, with tracker IDs annotated with their human-readable name
 
 ## Installation
 
-### Using lazy.nvim (Recommended)
+### lazy.nvim
 
 ```lua
 {
@@ -23,94 +24,70 @@ Fuzzy-searchable field completion for editing Faff session files in Neovim.
 }
 ```
 
-If `faff` is not on your `$PATH`, add:
-
-```lua
-config = function()
-  vim.g.faff_command = '/path/to/your/faff'
-end,
-```
+No further configuration needed if `faff` is on your `$PATH` and your workspace is at `~/.faff` or `$FAFF_DIR`.
 
 ## Usage
 
-The plugin automatically activates when editing:
-- Faff log files opened via `faff log edit` (`$FAFF_DIR/logs/YYYY-MM-DD.toml`)
-
-### Using the Telescope Picker
-
-1. Position cursor on a session field line:
+1. Run `faff log edit` to open today's log
+2. Move the cursor to a session field line, e.g.:
    ```toml
    role = ""
+   impact = ""
+   mode = ""
+   subject = ""
    trackers = []
    ```
+3. Press `Ctrl-F` (normal or insert mode)
+4. Fuzzy-search and press Enter to insert
 
-2. Press `Ctrl-F` (works in both normal and insert mode)
-
-3. Telescope opens with a fuzzy-searchable list:
-   - For **trackers**: Shows tracker name prominently with ID
-   - For **other fields**: Shows value and usage statistics
-   - Type to fuzzy-search and filter in real-time
-
-4. Select with Enter:
-   - **Trackers**: Inserts `"element:12345", # Customer Name`
-   - **Other fields**: Inserts just the value
-
-### Example
-
-When completing a tracker field:
-```toml
-trackers = [
-```
-
-Press `Ctrl-F`, type "customer", select from list, and it inserts:
+For tracker fields, the picker shows the tracker name prominently and inserts the ID with a comment:
 ```toml
 trackers = ["element:2633285", # Customer Support
 ```
 
-## Supported Fields
-
-- `mode = "..."`
-- `subject = "..."`
-- `tracker` in `trackers = [ "...",]`
-- `role = "..."`
-- `impact = "..."`
-
-## How It Works
-
-The plugin:
-1. Detects faff log files (`$FAFF_DIR/logs/YYYY-MM-DD.toml`) and sets filetype to `faff`
-2. Binds `Ctrl-F` to open the Telescope picker
-3. When triggered, detects which session field you're editing
-4. Calls `faff field list <field> --plain` to get ALL values (used + unused)
-5. For trackers, shows tracker names from plan definitions
-6. Opens Telescope for fuzzy searching
-7. Inserts selected value with comments for trackers
-
 ## Configuration
 
-### Custom Faff Command Path
+All configuration is optional. Set these in your lazy.nvim `config` function or anywhere in your Neovim config.
 
-If `faff` is not in your `$PATH` (e.g., installed in a Python venv), you can specify the full path:
+### `vim.g.faff_root`
+
+Path to your Faff workspace root. Use this if your workspace is not at `~/.faff` and you don't have `$FAFF_DIR` set in your environment (e.g. when launching Neovim from a GUI).
+
+```lua
+vim.g.faff_root = '/path/to/your/faff/workspace'
+```
+
+Resolution order: `g:faff_root` → `$FAFF_DIR` → `~/.faff`
+
+### `vim.g.faff_command`
+
+Path to the `faff` executable. Use this if `faff` is installed in a virtualenv or otherwise not on your `$PATH`.
 
 ```lua
 vim.g.faff_command = '/Users/tom/.virtualenvs/faff/bin/faff'
 ```
 
-If not set, defaults to `faff` (assumes it's on your PATH).
+### Custom keybinding
 
-### Custom Keybinding
-
-To change the keybinding from `Ctrl-F`, update the keymap in your config:
+The default `Ctrl-F` binding is set in `ftplugin/faff.vim`. To override it, add to your config:
 
 ```lua
-vim.keymap.set({'n', 'i'}, '<leader>ff', function()  -- Use leader+ff instead
-  require('faff.picker').pick_field()
-end, { buffer = true, desc = 'Pick faff session field value' })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'faff',
+  callback = function()
+    vim.keymap.set({ 'n', 'i' }, '<leader>ff', function()
+      require('faff.picker').pick_field()
+    end, { buffer = true, desc = 'Pick faff session field value' })
+  end,
+})
 ```
 
-## Requirements
+## Supported fields
 
-- Neovim (tested on v0.10+)
-- [Telescope](https://github.com/nvim-telescope/telescope.nvim)
-- `faff` CLI must be available (either in `$PATH` or configured via `g:faff_command`)
-- Your current working directory must be a Faff workspace (or set explicitly)
+| Field | Description |
+|-------|-------------|
+| `role` | Your role for the session |
+| `impact` | The impact/objective |
+| `mode` | The type of work (e.g. coding, reviewing) |
+| `subject` | What you're working on |
+| `trackers` | Issue/ticket references |
