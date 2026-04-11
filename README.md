@@ -19,38 +19,22 @@ Fuzzy-searchable field completion for editing Faff session files in Neovim.
 ```lua
 {
   'faffhub/faff-cli-neovim',
-  dependencies = {
-    'nvim-telescope/telescope.nvim',
-  },
-  init = function()
-    -- Set up filetype detection for .faff.toml files
-    vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
-      pattern = '*.faff.toml',
-      callback = function()
-        vim.bo.filetype = 'faff'
-      end,
-    })
-
-    -- Set up keybindings for Telescope field picker
-    vim.api.nvim_create_autocmd('FileType', {
-      pattern = 'faff',
-      callback = function()
-        vim.keymap.set({'n', 'i'}, '<C-f>', function()
-          require('faff.picker').pick_field()
-        end, { buffer = true, desc = 'Pick faff session field value' })
-      end,
-    })
-  end,
-  config = function()
-    vim.g.faff_command = '/path/to/your/faff'  -- Update this path
-  end,
+  dependencies = { 'nvim-telescope/telescope.nvim' },
 }
+```
+
+If `faff` is not on your `$PATH`, add:
+
+```lua
+config = function()
+  vim.g.faff_command = '/path/to/your/faff'
+end,
 ```
 
 ## Usage
 
 The plugin automatically activates when editing:
-- Temporary intent files ending in `.faff.toml` (via `faff intent edit`, `faff intent derive`)
+- Faff log files opened via `faff log edit` (`$FAFF_DIR/logs/YYYY-MM-DD.toml`)
 
 ### Using the Telescope Picker
 
@@ -94,7 +78,7 @@ trackers = ["element:2633285", # Customer Support
 ## How It Works
 
 The plugin:
-1. Detects `.faff.toml` files and sets filetype to `faff`
+1. Detects faff log files (`$FAFF_DIR/logs/YYYY-MM-DD.toml`) and sets filetype to `faff`
 2. Binds `Ctrl-F` to open the Telescope picker
 3. When triggered, detects which session field you're editing
 4. Calls `faff field list <field> --plain` to get ALL values (used + unused)

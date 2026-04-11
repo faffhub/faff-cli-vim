@@ -1,5 +1,5 @@
 " Faff filetype plugin
-" Sets up omnicompletion for ASTRO fields (legacy - prefer Telescope picker)
+" Sets up omnicompletion and Telescope picker for faff session fields
 
 if exists('b:did_ftplugin')
     finish
@@ -12,6 +12,10 @@ setlocal omnifunc=faff#Complete
 " Enable completion menu
 setlocal completeopt+=menu,menuone
 
-" Add some helpful key mappings (optional)
-" User can trigger completion with Ctrl-X Ctrl-O
-" Or set up more automatic triggers if desired
+" Telescope picker (Ctrl-F in normal and insert mode)
+if has('nvim')
+  nnoremap <buffer> <C-f> <cmd>lua require('faff.picker').pick_field()<CR>
+  inoremap <buffer> <C-f> <cmd>lua require('faff.picker').pick_field()<CR>
+endif
+
+" User can also trigger omnicompletion with Ctrl-X Ctrl-O
