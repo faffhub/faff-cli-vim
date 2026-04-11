@@ -20,9 +20,9 @@ function! s:DetectFaffWorkspaceFile()
   let current_file = expand('%:p')
 
   " Check if file is in logs/ or plans/ subdirectory of FAFF_DIR
-  if current_file =~# '^' . escape(faff_dir, '/\') . 'logs/.*\.toml$'
+  if stridx(current_file, faff_dir . 'logs/') == 0
     set filetype=faff
-  elseif current_file =~# '^' . escape(faff_dir, '/\') . 'plans/.*\.\(toml\|json\)$'
+  elseif stridx(current_file, faff_dir . 'plans/') == 0
     set filetype=faff
   endif
 endfunction
