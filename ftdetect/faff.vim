@@ -1,9 +1,7 @@
 " Detect Faff files in the Faff workspace
 " Using 'set filetype=' to override built-in toml detection
-" (placed in after/ftdetect/ to run after built-in detection)
 
-" Match temporary files created by faff CLI (faff intent edit, etc.)
-autocmd BufRead,BufNewFile *.faff.toml set filetype=faff
+" Match log files opened via faff log edit
 
 " Detect files in FAFF_DIR (defaults to ~/.faff if not set)
 augroup faff_workspace_detect
